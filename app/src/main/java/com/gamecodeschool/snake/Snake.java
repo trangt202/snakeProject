@@ -128,40 +128,38 @@ class Snake {
 
 
     void move() {
-        // Move the body
-        // Start at the back and move it
-        // to the position of the segment in front of it
-        for (int i = segmentLocations.size() - 1; i > 0; i--) {
+        // Move the body and head
+        moveBody();
+        moveHead();
+    }
 
-            // Make it the same value as the next segment
-            // going forwards towards the head
+    private void moveBody() {
+        // Move the body segments
+        for (int i = segmentLocations.size() - 1; i > 0; i--) {
             segmentLocations.get(i).x = segmentLocations.get(i - 1).x;
             segmentLocations.get(i).y = segmentLocations.get(i - 1).y;
         }
+    }
 
-        // Move the head in the appropriate heading
-        // Get the existing head position
+    private void moveHead() {
+        // Get the head's current location
         Point p = segmentLocations.get(0);
 
-        // Move it appropriately
+        // Update the head's position based on the current heading
         switch (heading) {
             case UP:
                 p.y--;
                 break;
-
             case RIGHT:
                 p.x++;
                 break;
-
             case DOWN:
                 p.y++;
                 break;
-
             case LEFT:
                 p.x--;
                 break;
         }
-
     }
 
     boolean detectDeath() {
