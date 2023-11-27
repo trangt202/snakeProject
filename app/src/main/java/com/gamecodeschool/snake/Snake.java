@@ -161,7 +161,6 @@ class Snake {
                 break;
         }
     }
-
     boolean detectDeath() {
         // Has the snake died?
         boolean dead = false;
