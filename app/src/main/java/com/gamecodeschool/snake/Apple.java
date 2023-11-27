@@ -18,6 +18,7 @@ class Apple {
     // to spawn an apple
     private Point spawnRange;
     private int appleSize;
+    private Point gridSize;
 
     // An image to represent the apple
     private Bitmap mBitmapApple;
@@ -40,11 +41,17 @@ class Apple {
     }
 
     // This is called every time an apple is eaten
-    void spawn(){
-        // Choose two random values and place the apple
+    private int getRandomNumber(int maxValue) {
         Random random = new Random();
-        location.x = random.nextInt(spawnRange.x) + 1;
-        location.y = random.nextInt(spawnRange.y - 1) + 1;
+        return random.nextInt(maxValue) + 1;
+    }
+    void spawn() {
+        location.x = getRandomNumber(gridSize.x);
+        location.y = getRandomNumber(gridSize.y - 1);
+    }
+    void draw(Canvas canvas, Paint paint){
+        canvas.drawBitmap(mBitmapApple,
+                location.x * appleSize, location.y * appleSize, paint);
     }
 
     // Let SnakeGame know where the apple is
@@ -53,11 +60,7 @@ class Apple {
         return location;
     }
 
-    // Draw the apple
-    void draw(Canvas canvas, Paint paint){
-        canvas.drawBitmap(mBitmapApple,
-                location.x * appleSize, location.y * appleSize, paint);
 
-    }
+
 
 }
