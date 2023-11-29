@@ -43,4 +43,3 @@ public class SnakeActivity extends Activity {
         mSnakeGame.pause();
     }
 }
-

@@ -16,20 +16,19 @@ class Apple {
 
     // The range of values we can choose from
     // to spawn an apple
-    private Point spawnRange;
-    private int appleSize;
-    private Point gridSize;
+    private Point mSpawnRange;
+    private int mSize;
 
     // An image to represent the apple
     private Bitmap mBitmapApple;
 
-    /// Set up the apple in the constructor
+    // Set up the apple in the constructor
     Apple(Context context, Point sr, int s){
 
-        // Make a note of the passed in spawn range
-        spawnRange = sr;
+        // Make a note of the passed-in spawn range
+        mSpawnRange = sr;
         // Make a note of the size of an apple
-        appleSize = s;
+        mSize = s;
         // Hide the apple off-screen until the game starts
         location.x = -10;
 
@@ -41,17 +40,11 @@ class Apple {
     }
 
     // This is called every time an apple is eaten
-    private int getRandomNumber(int maxValue) {
+    void spawn(){
+        // Choose two random values and place the apple
         Random random = new Random();
-        return random.nextInt(maxValue) + 1;
-    }
-    void spawn() {
-        location.x = getRandomNumber(gridSize.x);
-        location.y = getRandomNumber(gridSize.y - 1);
-    }
-    void draw(Canvas canvas, Paint paint){
-        canvas.drawBitmap(mBitmapApple,
-                location.x * appleSize, location.y * appleSize, paint);
+        location.x = random.nextInt(mSpawnRange.x) + 1;
+        location.y = random.nextInt(mSpawnRange.y - 1) + 1;
     }
 
     // Let SnakeGame know where the apple is
@@ -60,7 +53,10 @@ class Apple {
         return location;
     }
 
-
-
-
+    // Draw the apple
+    void draw(Canvas canvas, Paint paint){
+        canvas.drawBitmap(mBitmapApple,
+                location.x * mSize, location.y * mSize, paint);
+    }
 }
+

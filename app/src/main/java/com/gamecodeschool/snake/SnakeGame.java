@@ -277,3 +277,4 @@ class SnakeGame extends SurfaceView implements Runnable{
         mThread.start();
     }
 }
+
