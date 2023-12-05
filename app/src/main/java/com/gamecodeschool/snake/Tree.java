@@ -41,7 +41,7 @@ public class Tree {
 
     public void draw(Canvas canvas, Paint paint) {
         // Increase the size of the tree
-        int treeSize = mSize * 7;  // You can adjust this multiplier based on how big you want the tree
+        int treeSize = mSize * 2;  // You can adjust this multiplier based on how big you want the tree
         canvas.drawBitmap(mBitmapObstacle, location.x * mSize, location.y * mSize, paint);
     }
 }
