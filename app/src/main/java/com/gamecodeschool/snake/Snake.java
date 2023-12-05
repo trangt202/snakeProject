@@ -42,7 +42,11 @@ class Snake {
 
     // A bitmap for the body
     private Bitmap mBitmapBody;
+    private Tree mTree;
 
+    void setTree(Tree tree) {
+        mTree = tree;
+    }
 
     Snake(Context context, Point mr, int ss) {
 
@@ -194,6 +198,19 @@ class Snake {
         return dead;
     }
 
+    //check collison with tree
+    public boolean checkCollisionWithTree(Point treeLocation) {
+        // Check if the head of the snake collides with the tree
+        return segmentLocations.get(0).equals(treeLocation);
+    }
+
+    // Method to reduce snake length
+    public void reduceSnakeLength() {
+        if (segmentLocations.size() > 1) {
+            // Remove the last segment to reduce the snake length
+            segmentLocations.remove(segmentLocations.size() - 1);
+        }
+    }
     boolean checkDinner(Point l) {
         //if (snakeXs[0] == l.x && snakeYs[0] == l.y) {
         if (segmentLocations.get(0).x == l.x &&

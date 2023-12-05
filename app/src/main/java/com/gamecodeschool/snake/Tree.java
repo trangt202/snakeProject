@@ -1,3 +1,4 @@
+// Tree.java
 package com.gamecodeschool.snake;
 
 import android.content.Context;
@@ -6,11 +7,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.Log;
 
 import java.util.Random;
 
-class Tree {
+public class Tree {
 
     private Point location = new Point();
     private Point mSpawnRange;
@@ -20,19 +20,17 @@ class Tree {
     public Tree(Context context, Point sr, int s) {
         mSpawnRange = sr;
         mSize = s;
+        // Hide the apple off-screen until the game starts
         location.x = -10;
 
-        // Load the obstacle bitmap
-        try {
-            mBitmapObstacle = BitmapFactory.decodeResource(context.getResources(), R.drawable.tree);
-            mBitmapObstacle = Bitmap.createScaledBitmap(mBitmapObstacle, s, s, false);
-        } catch (Exception e) {
-            Log.e("Tree", "Error loading obstacle bitmap: " + e.getMessage());
-        }
+
+        mBitmapObstacle = BitmapFactory.decodeResource(context.getResources(), R.drawable.tree);
+        mBitmapObstacle = Bitmap.createScaledBitmap(mBitmapObstacle, s, s, false);
     }
 
     public void spawn() {
         Random random = new Random();
+        // Change the range and adjust the spawn position as needed
         location.x = random.nextInt(mSpawnRange.x) + 1;
         location.y = random.nextInt(mSpawnRange.y - 1) + 1;
     }
@@ -42,8 +40,13 @@ class Tree {
     }
 
     public void draw(Canvas canvas, Paint paint) {
-        if (mBitmapObstacle != null) {
-            canvas.drawBitmap(mBitmapObstacle, location.x * mSize, location.y * mSize, paint);
-        }
+        // Increase the size of the tree
+        int treeSize = mSize * 7;  // You can adjust this multiplier based on how big you want the tree
+        canvas.drawBitmap(mBitmapObstacle, location.x * mSize, location.y * mSize, paint);
     }
 }
+
+
+
+
+

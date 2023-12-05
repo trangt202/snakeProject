@@ -48,6 +48,10 @@ class SnakeGame extends SurfaceView implements Runnable{
     // And an apple
     private Apple mApple;
 
+    //declare a tree object
+    private Tree mTree;
+
+
 
     // This is the constructor method that gets called
     // from SnakeActivity
@@ -65,7 +69,6 @@ class SnakeGame extends SurfaceView implements Runnable{
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build();
-
             mSP = new SoundPool.Builder()
                     .setMaxStreams(5)
                     .setAudioAttributes(audioAttributes)
@@ -102,6 +105,7 @@ class SnakeGame extends SurfaceView implements Runnable{
                 new Point(NUM_BLOCKS_WIDE,
                         mNumBlocksHigh),
                 blockSize);
+        mTree = new Tree(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
 
     }
 
@@ -120,6 +124,8 @@ class SnakeGame extends SurfaceView implements Runnable{
 
         // Setup mNextFrameTime so an update can triggered
         mNextFrameTime = System.currentTimeMillis();
+
+        mTree.spawn();
     }
 
 
@@ -190,6 +196,13 @@ class SnakeGame extends SurfaceView implements Runnable{
 
             mPaused =true;
         }
+        // Check for collision with the tree
+        if (mSnake.checkCollisionWithTree(mTree.getLocation())) {
+            // Handle collision, e.g., reduce snake length or speed
+            mSnake.reduceSnakeLength();
+            // You might want to add a method like reduceSnakeLength() in the Snake class
+
+        }
 
     }
 
@@ -213,6 +226,8 @@ class SnakeGame extends SurfaceView implements Runnable{
             // Draw the apple and the snake
             mApple.draw(mCanvas, mPaint);
             mSnake.draw(mCanvas, mPaint);
+            mTree.draw(mCanvas, mPaint);
+
 
             // Draw some text while paused
             if(mPaused){
