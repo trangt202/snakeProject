@@ -21,6 +21,8 @@ class Apple {
 
     // An image to represent the apple
     private Bitmap mBitmapApple;
+    //assigned score to the apple
+    private int score;
 
     // Set up the apple in the constructor
     Apple(Context context, Point sr, int s){
@@ -37,6 +39,10 @@ class Apple {
 
         // Resize the bitmap
         mBitmapApple = Bitmap.createScaledBitmap(mBitmapApple, s, s, false);
+        //generate random score for the apple
+        Random random = new Random();
+        //random score between 1 and 10
+        score = random.nextInt(10)+1;
     }
 
     // This is called every time an apple is eaten
@@ -45,12 +51,19 @@ class Apple {
         Random random = new Random();
         location.x = random.nextInt(mSpawnRange.x) + 1;
         location.y = random.nextInt(mSpawnRange.y - 1) + 1;
+
+        //update the score with new random value
+        score = random.nextInt(10)+1;
     }
 
     // Let SnakeGame know where the apple is
     // SnakeGame can share this with the snake
     Point getLocation(){
         return location;
+    }
+
+    int getScore() {
+        return score;
     }
 
     // Draw the apple

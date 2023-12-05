@@ -183,7 +183,7 @@ class SnakeGame extends SurfaceView implements Runnable{
             mApple.spawn();
 
             // Add to  mScore
-            mScore = mScore + 1;
+            mScore = mScore + 2;
 
             // Play a sound
             mSP.play(mEat_ID, 1, 1, 0, 0, 1);
@@ -214,18 +214,19 @@ class SnakeGame extends SurfaceView implements Runnable{
             mCanvas = mSurfaceHolder.lockCanvas();
 
             // Fill the screen with a color
-            mCanvas.drawColor(Color.argb(255, 26, 128, 182));
+            mCanvas.drawColor(Color.argb(255, 0, 0, 182));
 
             // Set the size and color of the mPaint for the text
             mPaint.setColor(Color.argb(255, 255, 255, 255));
             mPaint.setTextSize(120);
 
             // Draw the score
-            mCanvas.drawText("" + mScore, 20, 120, mPaint);
+            mCanvas.drawText("Score: " + mScore, 20, 120, mPaint);
 
             // Draw the apple and the snake
             mApple.draw(mCanvas, mPaint);
             mSnake.draw(mCanvas, mPaint);
+            //draw the tree
             mTree.draw(mCanvas, mPaint);
 
 
@@ -233,15 +234,15 @@ class SnakeGame extends SurfaceView implements Runnable{
             if(mPaused){
 
                 // Set the size and color of the mPaint for the text
-                mPaint.setColor(Color.argb(255, 255, 255, 255));
-                mPaint.setTextSize(250);
+                mPaint.setColor(Color.argb(255, 255, 255, 0));
+                mPaint.setTextSize(120);
 
                 // Draw the message
                 // We will give this an international upgrade soon
                 //mCanvas.drawText("Tap To Play!", 200, 700, mPaint);
                 mCanvas.drawText(getResources().
                                 getString(R.string.tap_to_play),
-                        200, 700, mPaint);
+                        8, 270, mPaint);
             }
 
 
