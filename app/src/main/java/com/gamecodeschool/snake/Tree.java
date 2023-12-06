@@ -16,6 +16,7 @@ public class Tree {
     private Point mSpawnRange;
     private int mSize;
     private Bitmap mBitmapObstacle;
+    int mScoreTree;
 
     public Tree(Context context, Point sr, int s) {
         mSpawnRange = sr;
@@ -33,10 +34,16 @@ public class Tree {
         // Change the range and adjust the spawn position as needed
         location.x = random.nextInt(mSpawnRange.x) + 1;
         location.y = random.nextInt(mSpawnRange.y - 1) + 1;
+
+        mScoreTree = random.nextInt(5)+1;
     }
 
     public Point getLocation() {
         return location;
+    }
+
+    int getScore() {
+        return mScoreTree;
     }
 
     public void draw(Canvas canvas, Paint paint) {

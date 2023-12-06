@@ -51,8 +51,6 @@ class SnakeGame extends SurfaceView implements Runnable{
     //declare a tree object
     private Tree mTree;
 
-
-
     // This is the constructor method that gets called
     // from SnakeActivity
     public SnakeGame(Context context, Point size) {
@@ -183,7 +181,7 @@ class SnakeGame extends SurfaceView implements Runnable{
             mApple.spawn();
 
             // Add to  mScore
-            mScore = mScore + 2;
+            mScore = mScore + mApple.getScore();
 
             // Play a sound
             mSP.play(mEat_ID, 1, 1, 0, 0, 1);
@@ -200,10 +198,11 @@ class SnakeGame extends SurfaceView implements Runnable{
         if (mSnake.checkCollisionWithTree(mTree.getLocation())) {
             // Handle collision, e.g., reduce snake length or speed
             mSnake.reduceSnakeLength();
+            //subtract the random value everytime it hit a tree
+            mScore = mScore - mTree.getScore();
             // You might want to add a method like reduceSnakeLength() in the Snake class
 
         }
-
     }
 
 
