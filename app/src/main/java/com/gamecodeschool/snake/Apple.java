@@ -6,70 +6,99 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+
 import java.util.Random;
 
 class Apple {
 
-    // The location of the apple on the grid
-    // Not in pixels
     private Point location = new Point();
-
-    // The range of values we can choose from
-    // to spawn an apple
     private Point mSpawnRange;
     private int mSize;
-
-    // An image to represent the apple
     private Bitmap mBitmapApple;
-    //assigned score to the apple
-    private int score;
+    int mScore;
 
-    // Set up the apple in the constructor
-    Apple(Context context, Point sr, int s){
+    // Private constructor to enforce the use of the builder
+    private Apple(Point spawnRange, int size, Bitmap bitmapApple, int score) {
+        this.mSpawnRange = spawnRange;
+        this.mSize = size;
+        this.mBitmapApple = bitmapApple;
+        this.mScore = score;
+    }
 
-        // Make a note of the passed-in spawn range
-        mSpawnRange = sr;
-        // Make a note of the size of an apple
-        mSize = s;
-        // Hide the apple off-screen until the game starts
-        location.x = -10;
+    // Builder class for constructing Apple objects
+    static class Builder {
+        private Point location = new Point();
+        private Point spawnRange;
+        private int size;
+        private Bitmap bitmapApple;
+        private int score;
 
-        // Load the image to the bitmap
-        mBitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.apple);
+        Builder(Context context) {
+            Random random = new Random();
+            spawnRange = new Point(random.nextInt(100) + 1, random.nextInt(100) + 1);
+            size = random.nextInt(20) + 10;
 
-        // Resize the bitmap
-        mBitmapApple = Bitmap.createScaledBitmap(mBitmapApple, s, s, false);
-        //generate random score for the apple
-        Random random = new Random();
-        //random score between 1 and 10
-        score = random.nextInt(10)+1;
+            location.x = -10; // Default off-screen location
+
+            bitmapApple = BitmapFactory.decodeResource(context.getResources(), R.drawable.apple);
+
+            // Generate a random score between 1 and 10
+            score = random.nextInt(10) + 1;
+        }
+
+        Builder setLocation(int x, int y) {
+            location.x = x;
+            location.y = y;
+            return this;
+        }
+
+        Builder setSpawnRange(Point spawnRange) {
+            this.spawnRange = spawnRange;
+            return this;
+        }
+
+        Builder setSize(int size) {
+            this.size = size;
+            return this;
+        }
+
+        Builder setBitmap(Bitmap bitmapApple) {
+            this.bitmapApple = bitmapApple;
+            return this;
+        }
+
+        Builder setScore(int score) {
+            this.score = score;
+            return this;
+        }
+
+        Apple build() {
+            return new Apple(spawnRange, size, bitmapApple, score);
+        }
     }
 
     // This is called every time an apple is eaten
-    void spawn(){
-        // Choose two random values and place the apple
+    void spawn() {
         Random random = new Random();
         location.x = random.nextInt(mSpawnRange.x) + 1;
         location.y = random.nextInt(mSpawnRange.y - 1) + 1;
 
-        //update the score with new random value
-        score = random.nextInt(10)+1;
+        // Update the score with a new random value
+        mScore = random.nextInt(10) + 2;
     }
 
-    // Let SnakeGame know where the apple is
-    // SnakeGame can share this with the snake
-    Point getLocation(){
+    Point getLocation() {
         return location;
     }
 
     int getScore() {
-        return score;
+        return mScore;
     }
 
     // Draw the apple
-    void draw(Canvas canvas, Paint paint){
-        canvas.drawBitmap(mBitmapApple,
-                location.x * mSize, location.y * mSize, paint);
+    void draw(Canvas canvas, Paint paint) {
+        canvas.drawBitmap(mBitmapApple, location.x * mSize, location.y * mSize, paint);
     }
 }
+
 
