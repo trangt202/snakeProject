@@ -15,6 +15,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.io.IOException;
+import android.graphics.BitmapFactory;
+
 
 class SnakeGame extends SurfaceView implements Runnable{
 
@@ -96,10 +98,12 @@ class SnakeGame extends SurfaceView implements Runnable{
         mPaint = new Paint();
 
         // Call the constructors of our two game objects
-        mApple = new Apple(context,
-                new Point(NUM_BLOCKS_WIDE,
-                        mNumBlocksHigh),
-                blockSize);
+        mApple = new Apple.Builder(context)
+                .setSpawnRange(new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh))
+                .setSize(blockSize)
+                .setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.apple))
+                .setScore(0)  // Set an initial score if needed
+                .build();
 
         mSnake = new Snake(context,
                 new Point(NUM_BLOCKS_WIDE,
