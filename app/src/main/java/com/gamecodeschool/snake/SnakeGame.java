@@ -15,11 +15,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.io.IOException;
-import android.graphics.BitmapFactory;
-
 
 class SnakeGame extends SurfaceView implements Runnable{
-    // Create an Apple using the Builder
 
     // Objects for the game loop/thread
     private Thread mThread = null;
@@ -53,6 +50,7 @@ class SnakeGame extends SurfaceView implements Runnable{
 
     //declare a tree object
     private Tree mTree;
+
 
 
     // This is the constructor method that gets called
@@ -98,13 +96,10 @@ class SnakeGame extends SurfaceView implements Runnable{
         mPaint = new Paint();
 
         // Call the constructors of our two game objects
-        mApple = mApple = new Apple.Builder(context)
-                .setSpawnRange(new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh))
-                .setSize(blockSize)
-                .setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.apple))
-                .setScore(0)  // Set an initial score if needed
-                .build();
-
+        mApple = new Apple(context,
+                new Point(NUM_BLOCKS_WIDE,
+                        mNumBlocksHigh),
+                blockSize);
 
         mSnake = new Snake(context,
                 new Point(NUM_BLOCKS_WIDE,
@@ -188,7 +183,7 @@ class SnakeGame extends SurfaceView implements Runnable{
             mApple.spawn();
 
             // Add to  mScore
-            mScore = mScore + mApple.getScore();
+            mScore = mScore + 2;
 
             // Play a sound
             mSP.play(mEat_ID, 1, 1, 0, 0, 1);
@@ -205,11 +200,10 @@ class SnakeGame extends SurfaceView implements Runnable{
         if (mSnake.checkCollisionWithTree(mTree.getLocation())) {
             // Handle collision, e.g., reduce snake length or speed
             mSnake.reduceSnakeLength();
-            //subtract the random value everytime it hit a tree
-            mScore = mScore - mTree.getScore();
             // You might want to add a method like reduceSnakeLength() in the Snake class
 
         }
+
     }
 
 
