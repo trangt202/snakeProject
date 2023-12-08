@@ -51,6 +51,7 @@ class SnakeGame extends SurfaceView implements Runnable{
     //declare a tree object
     private Tree mTree;
     private Mushroom mMushroom;
+    private int mHighScore;
 
     // This is the constructor method that gets called
     // from SnakeActivity
@@ -108,6 +109,7 @@ class SnakeGame extends SurfaceView implements Runnable{
         // Initialize Mushroom
         // Assuming you are inside an Activity or another context-aware class
         mMushroom = new Mushroom(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
+        mHighScore = 0;
 
     }
 
@@ -131,6 +133,12 @@ class SnakeGame extends SurfaceView implements Runnable{
         mMushroom.spawn();
     }
 
+    private void updateHighScore() {
+        if (mScore > mHighScore) {
+            mHighScore = mScore;
+            // You can save the high score to SharedPreferences or a database here
+        }
+    }
 
     // Handles the game loop
     @Override
@@ -213,9 +221,9 @@ class SnakeGame extends SurfaceView implements Runnable{
             // Apply mushroom effects, e.g., increase snake speed
             mSnake.increaseSpeed();
 
-                // Play a sound or provide feedback as needed
                 // mSP.play(mMushroomSound, 1, 1, 0, 0, 1);
             }
+        updateHighScore();
         }
 
 
@@ -231,7 +239,7 @@ class SnakeGame extends SurfaceView implements Runnable{
 
             // Set the size and color of the mPaint for the text
             mPaint.setColor(Color.argb(255, 255, 255, 255));
-            mPaint.setTextSize(120);
+            mPaint.setTextSize(60);
 
             // Draw the score
             mCanvas.drawText("Score: " + mScore, 20, 120, mPaint);
@@ -250,17 +258,19 @@ class SnakeGame extends SurfaceView implements Runnable{
 
                 // Set the size and color of the mPaint for the text
                 mPaint.setColor(Color.argb(255, 255, 255, 0));
-                mPaint.setTextSize(120);
+                mPaint.setTextSize(100);
 
                 // Draw the message
                 // We will give this an international upgrade soon
                 //mCanvas.drawText("Tap To Play!", 200, 700, mPaint);
                 mCanvas.drawText(getResources().
                                 getString(R.string.tap_to_play),
-                        8, 270, mPaint);
+                        1650, 950, mPaint);
             }
 
-
+            // Draw the high score
+            mCanvas.drawText("High Score: " + mHighScore, 20, 240, mPaint);
+            mPaint.setTextSize(60);
             // Unlock the mCanvas and reveal the graphics for this frame
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
