@@ -18,7 +18,6 @@ class Apple {
     // to spawn an apple
     private Point mSpawnRange;
     private int mSize;
-
     // An image to represent the apple
     private Bitmap mBitmapApple;
     //assigned score to the apple
@@ -72,4 +71,5 @@ class Apple {
                 location.x * mSize, location.y * mSize, paint);
     }
 }
+
 
