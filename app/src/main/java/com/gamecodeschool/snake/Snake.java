@@ -44,6 +44,8 @@ class Snake {
     private Bitmap mBitmapBody;
     private Tree mTree;
 
+    private int speed; // Add a speed variable
+
     void setTree(Tree tree) {
         mTree = tree;
     }
@@ -115,6 +117,11 @@ class Snake {
         // The halfway point across the screen in pixels
         // Used to detect which side of screen was pressed
         halfWayPoint = mr.x * ss / 2;
+        this.speed = 1;
+    }
+    public void increaseSpeed() {
+        // Increase the snake's speed
+        speed += 10;
     }
 
     // Get the snake ready for a new game
@@ -225,6 +232,9 @@ class Snake {
             return true;
         }
         return false;
+    }
+    public Point getHead() {
+        return segmentLocations.get(0);
     }
 
     void draw(Canvas canvas, Paint paint) {

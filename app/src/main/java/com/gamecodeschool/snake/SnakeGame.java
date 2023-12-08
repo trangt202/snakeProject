@@ -32,7 +32,7 @@ class SnakeGame extends SurfaceView implements Runnable{
     private int mCrashID = -1;
 
     // The size in segments of the playable area
-    private final int NUM_BLOCKS_WIDE = 40;
+    public static final int NUM_BLOCKS_WIDE = 40;
     private int mNumBlocksHigh;
 
     // How many points does the player have
@@ -50,6 +50,7 @@ class SnakeGame extends SurfaceView implements Runnable{
 
     //declare a tree object
     private Tree mTree;
+    private Mushroom mMushroom;
 
     // This is the constructor method that gets called
     // from SnakeActivity
@@ -104,9 +105,11 @@ class SnakeGame extends SurfaceView implements Runnable{
                         mNumBlocksHigh),
                 blockSize);
         mTree = new Tree(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
+        // Initialize Mushroom
+        // Assuming you are inside an Activity or another context-aware class
+        mMushroom = new Mushroom(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
 
     }
-
 
     // Called to start a new game
     public void newGame() {
@@ -124,6 +127,8 @@ class SnakeGame extends SurfaceView implements Runnable{
         mNextFrameTime = System.currentTimeMillis();
 
         mTree.spawn();
+
+        mMushroom.spawn();
     }
 
 
@@ -137,7 +142,6 @@ class SnakeGame extends SurfaceView implements Runnable{
                     update();
                 }
             }
-
             draw();
         }
     }
@@ -201,9 +205,19 @@ class SnakeGame extends SurfaceView implements Runnable{
             //subtract the random value everytime it hit a tree
             mScore = mScore - mTree.getScore();
             // You might want to add a method like reduceSnakeLength() in the Snake class
+            }
+        if (mSnake.getHead().equals(mMushroom.getLocation()) && !mMushroom.isActivated()) {
+            // Activate the mushroom
+            mMushroom.activate();
 
+            // Apply mushroom effects, e.g., increase snake speed
+            mSnake.increaseSpeed();
+
+                // Play a sound or provide feedback as needed
+                // mSP.play(mMushroomSound, 1, 1, 0, 0, 1);
+            }
         }
-    }
+
 
 
     // Do all the drawing
@@ -227,6 +241,8 @@ class SnakeGame extends SurfaceView implements Runnable{
             mSnake.draw(mCanvas, mPaint);
             //draw the tree
             mTree.draw(mCanvas, mPaint);
+            mMushroom.draw(mCanvas, mPaint);
+
 
 
             // Draw some text while paused
