@@ -30,6 +30,7 @@ class SnakeGame extends SurfaceView implements Runnable{
     private SoundPool mSP;
     private int mEat_ID = -1;
     private int mCrashID = -1;
+    private int mBackgroundMusicID = -1;
 
     private int mEatMushroomID=-1;
 
@@ -91,6 +92,9 @@ class SnakeGame extends SurfaceView implements Runnable{
 
             descriptor = assetManager.openFd("eatmushroom.ogg");
             mEatMushroomID = mSP.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("Snake_song.ogg");
+            mBackgroundMusicID = mSP.load(descriptor, 0);
 
         } catch (IOException e) {
             // Error
@@ -304,20 +308,29 @@ class SnakeGame extends SurfaceView implements Runnable{
 
 
     // Stop the thread
-    public void pause() {
-        mPlaying = false;
-        try {
-            mThread.join();
-        } catch (InterruptedException e) {
-            // Error
-        }
-    }
-
     // Start the thread
     public void resume() {
         mPlaying = true;
         mThread = new Thread(this);
         mThread.start();
+
+        // Start playing the background music in loop mode
+        if (mBackgroundMusicID != -1) {
+            mSP.play(mBackgroundMusicID, 1, 1, 0, -1, 1);
+        }
+    }
+
+    // Stop the thread
+    public void pause() {
+        mPlaying = false;
+        try {
+            mThread.join();
+
+            // Stop the background music
+            mSP.stop(mBackgroundMusicID);
+        } catch (InterruptedException e) {
+            // Error handling
+        }
     }
 }
 
