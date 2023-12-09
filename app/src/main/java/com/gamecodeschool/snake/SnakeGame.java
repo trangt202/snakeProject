@@ -31,6 +31,8 @@ class SnakeGame extends SurfaceView implements Runnable{
     private int mEat_ID = -1;
     private int mCrashID = -1;
 
+    private int mEatMushroomID=-1;
+
     // The size in segments of the playable area
     public static final int NUM_BLOCKS_WIDE = 40;
     private int mNumBlocksHigh;
@@ -86,6 +88,9 @@ class SnakeGame extends SurfaceView implements Runnable{
 
             descriptor = assetManager.openFd("snake_death.ogg");
             mCrashID = mSP.load(descriptor, 0);
+
+            descriptor = assetManager.openFd("eatmushroom.ogg");
+            mEatMushroomID = mSP.load(descriptor, 0);
 
         } catch (IOException e) {
             // Error
@@ -188,13 +193,10 @@ class SnakeGame extends SurfaceView implements Runnable{
 
         // Did the head of the snake eat the apple?
         if(mSnake.checkDinner(mApple.getLocation())){
-            // This reminds me of Edge of Tomorrow.
             // One day the apple will be ready!
             mApple.spawn();
-
             // Add to  mScore
             mScore = mScore + mApple.getScore();
-
             // Play a sound
             mSP.play(mEat_ID, 1, 1, 0, 0, 1);
         }
@@ -213,16 +215,17 @@ class SnakeGame extends SurfaceView implements Runnable{
             //subtract the random value everytime it hit a tree
             mScore = mScore - mTree.getScore();
             // You might want to add a method like reduceSnakeLength() in the Snake class
-            }
-        if (mSnake.getHead().equals(mMushroom.getLocation()) && !mMushroom.isActivated()) {
+        }
+        if (mSnake.checkDinnerMushroom(mMushroom.getLocation()) && !mMushroom.isActivated()) {
+            mMushroom.spawn();
             // Activate the mushroom
-            mMushroom.activate();
+           // mMushroom.activate();
 
             // Apply mushroom effects, e.g., increase snake speed
             mSnake.increaseSpeed();
+            mSP.play(mEatMushroomID, 1, 1, 0, 0, 1);
 
-                // mSP.play(mMushroomSound, 1, 1, 0, 0, 1);
-            }
+        }
         updateHighScore();
         }
 
@@ -309,7 +312,6 @@ class SnakeGame extends SurfaceView implements Runnable{
             // Error
         }
     }
-
 
     // Start the thread
     public void resume() {

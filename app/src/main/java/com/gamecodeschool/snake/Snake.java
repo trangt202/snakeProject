@@ -46,6 +46,8 @@ class Snake {
 
     private int speed; // Add a speed variable
 
+    private Mushroom mMushroom;
+
     void setTree(Tree tree) {
         mTree = tree;
     }
@@ -121,7 +123,7 @@ class Snake {
     }
     public void increaseSpeed() {
         // Increase the snake's speed
-        speed += 10;
+        speed += 1;
     }
 
     // Get the snake ready for a new game
@@ -163,7 +165,7 @@ class Snake {
         // Get the existing head position
         Point p = segmentLocations.get(0);
 
-        // Move it appropriately
+        // Move it appropriately with speed
         switch (heading) {
             case UP:
                 p.y--;
@@ -223,16 +225,28 @@ class Snake {
         if (segmentLocations.get(0).x == l.x &&
                 segmentLocations.get(0).y == l.y) {
 
-            // Add a new Point to the list
-            // located off-screen.
-            // This is OK because on the next call to
-            // move it will take the position of
-            // the segment in front of it
             segmentLocations.add(new Point(-10, -10));
             return true;
         }
         return false;
     }
+    boolean checkDinnerMushroom(Point l) {
+        // Check if the head of the snake collides with the mushroom
+        if (segmentLocations.get(0).equals(l)) {
+            // Move the mushroom to a new location using the reference
+            segmentLocations.add(new Point(-20, -20));
+            return true;
+            // Optionally, you can apply effects specific to eating a mushroom here
+
+        }
+        return false;
+    }
+
+    // method to set Mushroom reference
+    public void setMushroom(Mushroom mushroom) {
+        mMushroom = mushroom;
+    }
+
     public Point getHead() {
         return segmentLocations.get(0);
     }

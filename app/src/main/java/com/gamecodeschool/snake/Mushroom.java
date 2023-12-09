@@ -31,33 +31,29 @@ class Mushroom {
         return location;
     }
 
-    public void spawn() {
+    void spawn() {
         // Set the mushroom's position randomly
         Random random = new Random();
-        location.x = random.nextInt(mSpawnRange.x) ;
-        location.y = random.nextInt(mSpawnRange.y - 5) + 3;
+        location.x = random.nextInt(mSpawnRange.x) + 1;
+        location.y = random.nextInt(mSpawnRange.y - 1) + 1;
 
-        isActivated = false; // Reset activation status when spawning
+      //  isActivated = false; // Reset activation status when spawning
     }
 
-    public int getSize() {
-        return mSize;
-    }
+    //int getSize() {
+        //return mSize;
+   // }
 
-    public boolean isActivated() {
+    boolean isActivated() {
         return isActivated;
     }
 
-    public void activate() {
-        isActivated = true;
-    }
 
-    public void draw(Canvas canvas, Paint paint) {
+    void draw(Canvas canvas, Paint paint) {
         // Draw the mushroom on the canvas
-        canvas.drawBitmap(mBitmapMushroom, location.x * mSize, location.y * mSize, paint);
+        canvas.drawBitmap(mBitmapMushroom, location.x*mSize, location.y*mSize , paint);
     }
 
-    // Additional methods as needed
 }
 
 
