@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import java.io.IOException;
+import android.util.Log;
 
 class SnakeGame extends SurfaceView implements Runnable{
 
@@ -99,6 +100,18 @@ class SnakeGame extends SurfaceView implements Runnable{
         } catch (IOException e) {
             // Error
         }
+        try {
+            AssetManager assetManager = context.getAssets();
+            AssetFileDescriptor descriptor;
+
+            // Prepare the sounds in memory
+            descriptor = assetManager.openFd("Snake_song.ogg");
+            mBackgroundMusicID = mSP.load(descriptor, 0);
+
+            Log.d("SnakeGame", "Background music loaded successfully");
+        } catch (IOException e) {
+            Log.e("SnakeGame", "Error loading background music: " + e.getMessage());
+        }
 
         // Initialize the drawing objects
         mSurfaceHolder = getHolder();
@@ -124,6 +137,10 @@ class SnakeGame extends SurfaceView implements Runnable{
 
     // Called to start a new game
     public void newGame() {
+
+        if (mBackgroundMusicID != -1) {
+            mSP.play(mBackgroundMusicID, 1, 1, 0, -1, 1);
+        }
 
         // reset the snake
         mSnake.reset(NUM_BLOCKS_WIDE, mNumBlocksHigh);
@@ -158,6 +175,10 @@ class SnakeGame extends SurfaceView implements Runnable{
                 if (updateRequired()) {
                     update();
                 }
+            }
+                else {
+                    // Game is paused or over, stop background music
+                    mSP.stop(mBackgroundMusicID);
             }
             draw();
         }
@@ -194,7 +215,6 @@ class SnakeGame extends SurfaceView implements Runnable{
 
         // Move the snake
         mSnake.move();
-
         // Did the head of the snake eat the apple?
         if(mSnake.checkDinner(mApple.getLocation())){
             // One day the apple will be ready!
@@ -313,9 +333,7 @@ class SnakeGame extends SurfaceView implements Runnable{
         mPlaying = true;
         mThread = new Thread(this);
         mThread.start();
-
-        // Start playing the background music in loop mode
-        if (mBackgroundMusicID != -1) {
+        if (!mPaused && mBackgroundMusicID != -1) {
             mSP.play(mBackgroundMusicID, 1, 1, 0, -1, 1);
         }
     }
