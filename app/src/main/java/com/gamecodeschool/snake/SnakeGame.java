@@ -57,6 +57,9 @@ class SnakeGame extends SurfaceView implements Runnable{
     private Mushroom mMushroom;
     private int mHighScore;
 
+    private int mLives;
+
+
     // This is the constructor method that gets called
     // from SnakeActivity
     public SnakeGame(Context context, Point size) {
@@ -132,6 +135,7 @@ class SnakeGame extends SurfaceView implements Runnable{
         // Assuming you are inside an Activity or another context-aware class
         mMushroom = new Mushroom(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
         mHighScore = 0;
+        mLives = 3;
 
     }
 
@@ -212,14 +216,14 @@ class SnakeGame extends SurfaceView implements Runnable{
 
     // Update all the game objects
     public void update() {
-
         // Move the snake
         mSnake.move();
+
         // Did the head of the snake eat the apple?
-        if(mSnake.checkDinner(mApple.getLocation())){
+        if (mSnake.checkDinner(mApple.getLocation())) {
             // One day the apple will be ready!
             mApple.spawn();
-            // Add to  mScore
+            // Add to mScore
             mScore = mScore + mApple.getScore();
             // Play a sound
             mSP.play(mEat_ID, 1, 1, 0, 0, 1);
@@ -227,31 +231,49 @@ class SnakeGame extends SurfaceView implements Runnable{
 
         // Did the snake die?
         if (mSnake.detectDeath()) {
-            // Pause the game ready to start again
+            // Play a sound
             mSP.play(mCrashID, 1, 1, 0, 0, 1);
 
-            mPaused =true;
+            // Reduce lives
+            mLives--;
+
+            // Check if the snake has no more lives
+            if (mLives <= 0) {
+                mPaused = true;
+                updateHighScore();
+                // Optionally, show a game over screen or handle game over logic
+            } else {
+                // If lives are remaining, reset the game components
+                newGame();
+            }
         }
+
         // Check for collision with the tree
         if (mSnake.checkCollisionWithTree(mTree.getLocation())) {
             // Handle collision, e.g., reduce snake length or speed
             mSnake.reduceSnakeLength();
-            //subtract the random value everytime it hit a tree
+            // Subtract the random value every time it hits a tree
             mScore = mScore - mTree.getScore();
             // You might want to add a method like reduceSnakeLength() in the Snake class
         }
+
         if (mSnake.checkDinnerMushroom(mMushroom.getLocation()) && !mMushroom.isActivated()) {
             mMushroom.spawn();
             // Activate the mushroom
-           // mMushroom.activate();
+            // mMushroom.activate();
 
             // Apply mushroom effects, e.g., increase snake speed
             mSnake.increaseSpeed();
             mSP.play(mEatMushroomID, 1, 1, 0, 0, 1);
+        }
 
-        }
         updateHighScore();
+
+        // Reset mLives to 3 if it reaches 0
+        if (mLives <= 0) {
+            mLives = 3;
         }
+    }
 
 
 
@@ -298,8 +320,11 @@ class SnakeGame extends SurfaceView implements Runnable{
             // Draw the high score
             mCanvas.drawText("High Score: " + mHighScore, 20, 240, mPaint);
             mPaint.setTextSize(60);
+            mCanvas.drawText("Lives: " + mLives, 20, 360, mPaint);
             // Unlock the mCanvas and reveal the graphics for this frame
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+
+
         }
     }
 
